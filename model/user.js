@@ -45,7 +45,7 @@ const UserSchema = new mongoose.Schema(
 );
 
 // Ensure unique index is created
-UserSchema.index({ phone_number: 1 }, { unique: true });
+// UserSchema.index({ phone_number: 1 }, { unique: true });
 
 // Export the User model
 module.exports = mongoose.model("User", UserSchema);
