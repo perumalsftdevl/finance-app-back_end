@@ -1,6 +1,6 @@
 const express = require("express");
 const user = require("../model/user");
-
+const bcryptjs = require("bcryptjs");
 const router = express.Router();
 
 router.get("/get-user", async (req, res) => {
@@ -25,17 +25,33 @@ router.get("/get-user", async (req, res) => {
 
 router.post("/add-user", async (req, res) => {
   try {
-    const body = req.body;
-    const Add_user = new user(body);
-    Add_user.save();
+    const { password, ...rest } = req.body;
 
-    if (Add_user) {
-      return res
-        .status(200)
-        .json({ msg: "User Added SuccessFully", status: true });
-    }
+    // Hash the password
+    const hashPassword = bcryptjs.hashSync(password, 10);
+
+    // Create a new user instance
+    const Add_user = new user({ ...rest, password: hashPassword });
+
+    // Save the user and catch any errors
+    await Add_user.save();
+
+    return res
+      .status(200)
+      .json({ message: "User Added Successfully", status: true });
   } catch (error) {
-    return res.status(500).json({ msg: error?.message, status: true });
+    if (error.code === 11000) {
+      // Handle duplicate key error
+      return res.status(200).json({
+        message: "Duplicate phone number, user already exists.",
+        false: true,
+      });
+    }
+
+    // Generic error handling
+    return res
+      .status(500)
+      .json({ msg: error?.message || "Something went wrong", status: false });
   }
 });
 

@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema(
     },
     phone_number: {
       type: String,
+      unique: true, // Corrected unique constraint syntax
     },
     password: {
       type: String,
@@ -42,6 +43,9 @@ const UserSchema = new mongoose.Schema(
     timestamps: true, // Automatically add createdAt and updatedAt timestamps
   }
 );
+
+// Ensure unique index is created
+UserSchema.index({ phone_number: 1 }, { unique: true });
 
 // Export the User model
 module.exports = mongoose.model("User", UserSchema);
