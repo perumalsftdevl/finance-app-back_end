@@ -7,7 +7,7 @@ router.get("/get-user", async (req, res) => {
   try {
     // Fetch all user data
     const data = await user.find({}); // Assuming 'user' is a Mongoose model
-
+    console.log("hiiii");
     // Respond with fetched data
     return res
       .status(200)

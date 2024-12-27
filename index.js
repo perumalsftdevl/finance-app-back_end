@@ -10,8 +10,8 @@ connectDB();
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:4200", // Your Angular app's URL
-    credentials: true, // Allow credentials (cookies)
+    origin: true, // Dynamically allows the origin of the request
+    credentials: true, // Allow credentials (e.g., cookies or tokens)
   })
 );
 app.use(express.json());
@@ -21,4 +21,8 @@ app.use("/auth", authController);
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log("server is running");
+});
+
+app.get("/", (req, res) => {
+  return res.send({ msg: "Api Calling" });
 });
