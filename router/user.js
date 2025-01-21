@@ -43,6 +43,7 @@ router.get("/get_user", verifyToken, verifyUserToken, async (req, res) => {
 
 router.post("/add_user", verifyToken, verifyUserToken, async (req, res) => {
   try {
+    delete req.body["_id"];
     const { password, ...rest } = req.body;
     const login_user = req.user.id; // The ID of the logged-in user (assumed to be set in the middleware)
 
