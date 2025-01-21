@@ -2,7 +2,12 @@ const jwt = require("jsonwebtoken");
 const errorHandler = require("./errorHandler.js");
 
 const verifyUserToken = (req, res, next) => {
-  const token = req.cookies.access_token;
+  const authHeader = req.headers["authorization"];
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return next(new Error("Unauthorized: Token is missing or malformed"));
+  }
+
+  const token = authHeader.split(" ")[1];
   if (!token) {
     // Token is not present
     return next(errorHandler(401, "Unauthorized: Token not provided"));
